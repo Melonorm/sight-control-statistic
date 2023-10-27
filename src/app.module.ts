@@ -1,18 +1,20 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import {ConfigModule, ConfigService} from "@nestjs/config";
+import {ConfigModule} from "@nestjs/config";
 import {TypeOrmModule} from "@nestjs/typeorm";
-import {getTypeOrmConfig} from "./configs/typeorm.config";
+import { IncomingDataParserModule } from './api/incoming_data_parser/incoming_data_parser.module';
+import { ShooterModule } from './api/shooter/shooter.module';
+import { ExerciseResultModule } from './api/exercise-result/exercise-result.module';
+import ormconfig from "./configs/typeorm.config";
 
 @Module({
   imports: [
       ConfigModule.forRoot(),
-      TypeOrmModule.forRootAsync({
-          imports: [ConfigModule],
-          inject: [ConfigService],
-          useFactory: getTypeOrmConfig
-      })
+      TypeOrmModule.forRoot(ormconfig),
+      IncomingDataParserModule,
+      ShooterModule,
+      ExerciseResultModule
   ],
   controllers: [AppController],
   providers: [AppService],
