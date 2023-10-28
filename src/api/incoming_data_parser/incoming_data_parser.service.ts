@@ -1,6 +1,11 @@
 import {Injectable} from '@nestjs/common';
 import {ShooterService} from "../shooter/shooter.service";
-import {IncomingResultsDto} from "../../common/dto/incomingResults.dto";
+import {
+    IncomingExercise,
+    IncomingFlight,
+    IncomingResultsDto,
+    IncomingShooter, IncomingShot
+} from "../../common/dto/incomingResults.dto";
 import {ShooterDto} from "../../common/dto/shooter.dto";
 import {ExerciseResultDto} from "../../common/dto/exercise-result.dto";
 import {ExerciseResultService} from "../exercise-result/exercise-result.service";
@@ -8,7 +13,6 @@ import {ShooterEntity} from "../../common/entities/shooter.entity";
 import {ExerciseResultEntity} from "../../common/entities/exerciseResult.entity";
 import {FlightService} from "../flight/flight.service";
 import {FlightDto} from "../../common/dto/flight.dto";
-import any = jasmine.any;
 import {FlightEntity} from "../../common/entities/flight.entity";
 import {ShotService} from "../shot/shot.service";
 import {ShotDto} from "../../common/dto/shot.dto";
@@ -25,7 +29,7 @@ export class IncomingDataParserService {
 
 
     async saveResults(dto: IncomingResultsDto) {
-        const incomingShooters = dto.shooters;  // TODO: Типизировать
+        const incomingShooters: IncomingShooter[] = dto.shooters;
         for (const incomingShooter of incomingShooters) {
             const dto: ShooterDto = {
                 firstName: incomingShooter.firstName,
@@ -36,7 +40,7 @@ export class IncomingDataParserService {
             };
             const shooter: ShooterEntity = await this.shooterService.tryToSaveAngGetSavedOrExisted(dto);
 
-            const incomingExercises = incomingShooter.exercises; // TODO: Типизировать
+            const incomingExercises: IncomingExercise[] = incomingShooter.exercises;
             for (const incomingExercise of incomingExercises) {
                 const dto: ExerciseResultDto = {
                     timestamp: incomingExercise.timestamp,
@@ -44,7 +48,7 @@ export class IncomingDataParserService {
                 };
                 const exerciseResult: ExerciseResultEntity = await this.exerciseResultService.create(dto);
                 if (exerciseResult) {
-                    const incomingFlights = incomingExercise.flights; // TODO: Типизировать
+                    const incomingFlights: IncomingFlight[] = incomingExercise.flights;
                     for (const incomingFlight of incomingFlights) {
                         const flightDto: FlightDto = {
                             type: incomingFlight.type,
@@ -53,7 +57,7 @@ export class IncomingDataParserService {
                         };
                         const flight: FlightEntity = await this.flightService.create(flightDto);
 
-                        const incomingShots = incomingFlight.shots;  // TODO: Типизировать
+                        const incomingShots: IncomingShot[] = incomingFlight.shots;
                         for (const incomingShot of incomingShots) {
                             const shotDto: ShotDto = {
                                 distance: incomingShot.distance,
@@ -64,10 +68,13 @@ export class IncomingDataParserService {
                             };
                             const shot: ShotEntity = await this.shotService.create(shotDto);
                         }
-
                     }
                 }
             }
         }
     }
 }
+
+
+
+
