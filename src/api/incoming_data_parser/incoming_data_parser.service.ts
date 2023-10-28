@@ -31,41 +31,34 @@ export class IncomingDataParserService {
     async saveResults(dto: IncomingResultsDto) {
         const incomingShooters: IncomingShooter[] = dto.shooters;
         for (const incomingShooter of incomingShooters) {
-            const dto: ShooterDto = {
-                firstName: incomingShooter.firstName,
-                lastName: incomingShooter.lastName,
-                fatherName: incomingShooter.fatherName,
-                callName: incomingShooter.callName,
-                yearBorn: incomingShooter.yearBorn
-            };
-            const shooter: ShooterEntity = await this.shooterService.tryToSaveAngGetSavedOrExisted(dto);
+            // наполнение Shooter
+            const shooterDto: ShooterDto = new ShooterDto();
+            Object.assign(shooterDto, incomingShooter);
+            const shooter: ShooterEntity = await this.shooterService.tryToSaveAngGetSavedOrExisted(shooterDto);
 
+            // наполнение ExersiceResult
             const incomingExercises: IncomingExercise[] = incomingShooter.exercises;
             for (const incomingExercise of incomingExercises) {
-                const dto: ExerciseResultDto = {
-                    timestamp: incomingExercise.timestamp,
-                    shooterId: shooter.id
-                };
-                const exerciseResult: ExerciseResultEntity = await this.exerciseResultService.create(dto);
+                const exerciseResultDto: ExerciseResultDto = new ExerciseResultDto();
+                Object.assign(exerciseResultDto, incomingExercise);
+                exerciseResultDto.shooterId = shooter.id;
+                const exerciseResult: ExerciseResultEntity = await this.exerciseResultService.create(exerciseResultDto);
+
+                // наполнение Flight
                 if (exerciseResult) {
                     const incomingFlights: IncomingFlight[] = incomingExercise.flights;
                     for (const incomingFlight of incomingFlights) {
-                        const flightDto: FlightDto = {
-                            type: incomingFlight.type,
-                            speed: incomingFlight.speed,
-                            exerciseResultId: exerciseResult.id
-                        };
+                        const flightDto: FlightDto = new FlightDto();
+                        Object.assign(flightDto, incomingFlight);
+                        flightDto.exerciseResultId = exerciseResult.id;
                         const flight: FlightEntity = await this.flightService.create(flightDto);
 
+                        // наполнение Shot
                         const incomingShots: IncomingShot[] = incomingFlight.shots;
                         for (const incomingShot of incomingShots) {
-                            const shotDto: ShotDto = {
-                                distance: incomingShot.distance,
-                                height: incomingShot.height,
-                                accuracy: incomingShot.accuracy,
-                                flightId: flight.id
-
-                            };
+                            const shotDto: ShotDto = new ShotDto();
+                            Object.assign(shotDto, incomingShot);
+                            shotDto.flightId = flight.id;
                             const shot: ShotEntity = await this.shotService.create(shotDto);
                         }
                     }
