@@ -10,7 +10,7 @@ export class ExerciseResultService {
         @InjectRepository(ExerciseResultEntity) private readonly exerciseResultRepository: Repository<ExerciseResultEntity>
     ) {}
 
-    async create(dto: ExerciseResultDto) {
+    async create(dto: ExerciseResultDto): Promise<ExerciseResultEntity> {
         const promiseExerciseResult = await this.exerciseResultRepository.findOne({
                 where: {
                     shooterId: dto.shooterId,
@@ -18,15 +18,12 @@ export class ExerciseResultService {
                 }
             }
         );
-        console.log(promiseExerciseResult);
 
         if (!promiseExerciseResult) {
-            console.log("!!!!!!!!!!!")
             const exerciseResult = new ExerciseResultEntity();
             Object.assign(exerciseResult, dto);
             exerciseResult.createdAt = new Date(dto.timestamp);
-            console.log(exerciseResult);
-            await this.exerciseResultRepository.save(exerciseResult);
+            return this.exerciseResultRepository.save(exerciseResult);
         }
     }
 

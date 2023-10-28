@@ -10,7 +10,7 @@ export class IncomingResultsDto {
             flights: [{
                 type?: string,
                 speed: number
-                shoots: [{
+                shots: [{
                     distance: number,
                     height: number,
                     accuracy: number

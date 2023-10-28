@@ -1,5 +1,6 @@
-import {Column, Entity, Generated, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
+import {Column, Entity, Generated, ManyToOne, OneToMany, PrimaryGeneratedColumn} from "typeorm";
 import {ShooterEntity} from "./shooter.entity";
+import {FlightEntity} from "./flight.entity";
 
 @Entity({ name: 'exercise_result' })
 export class ExerciseResultEntity {
@@ -20,6 +21,10 @@ export class ExerciseResultEntity {
     shooterId: number;
 
 
-    @ManyToOne(() => ShooterEntity, (shooter) => shooter.exerciseResults)
+    @ManyToOne(() => ShooterEntity, (shooter) => shooter.exerciseResults,
+        { onDelete: "CASCADE", onUpdate: "CASCADE" })
     shooter: ShooterEntity;
+
+    @OneToMany(() => FlightEntity, (flight) => flight.exerciseResult)
+    flights: FlightEntity[];
 }

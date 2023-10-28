@@ -4,6 +4,7 @@ import {ShooterEntity} from "../../common/entities/shooter.entity";
 import {Repository} from "typeorm";
 import {ShooterDto} from "../../common/dto/shooter.dto";
 import {RuntimeException} from "@nestjs/core/errors/exceptions";
+import {ExerciseResultEntity} from "../../common/entities/exerciseResult.entity";
 
 @Injectable()
 export class ShooterService {
@@ -31,7 +32,7 @@ export class ShooterService {
     }
 
     async tryToSaveAngGetSavedOrExisted(dto: ShooterDto): Promise<ShooterEntity> {
-        let shooter: ShooterEntity;
+        let shooter: ShooterEntity = new ShooterEntity();
         const promiseShooter = await this.shooterRepository.findOne({
             where: {
                 firstName: dto.firstName,
@@ -63,6 +64,16 @@ export class ShooterService {
             throw new NotFoundException("ШУТЕР НЕ НАЙДЕН"); // TODO: RE
         }
         return shooter;
+    }
+
+    async delete(id: number) {
+        const shooterById: ShooterEntity = await this.shooterRepository.findOne({
+            where: { id }
+        });
+        console.log(shooterById);
+        if (shooterById) {
+            return this.shooterRepository.delete(shooterById);
+        }
     }
 
 }

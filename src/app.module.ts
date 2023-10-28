@@ -6,6 +6,8 @@ import {TypeOrmModule} from "@nestjs/typeorm";
 import { IncomingDataParserModule } from './api/incoming_data_parser/incoming_data_parser.module';
 import { ShooterModule } from './api/shooter/shooter.module';
 import { ExerciseResultModule } from './api/exercise-result/exercise-result.module';
+import { FlightModule } from './api/flight/flight.module';
+import { ShotModule } from './api/shot/shot.module';
 import ormconfig from "./configs/typeorm.config";
 
 @Module({
@@ -14,7 +16,9 @@ import ormconfig from "./configs/typeorm.config";
       TypeOrmModule.forRoot(ormconfig),
       IncomingDataParserModule,
       ShooterModule,
-      ExerciseResultModule
+      ExerciseResultModule,
+      FlightModule,
+      ShotModule
   ],
   controllers: [AppController],
   providers: [AppService],
