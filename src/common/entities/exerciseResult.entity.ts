@@ -11,10 +11,10 @@ export class ExerciseResultEntity {
     @Generated('uuid')
     uuid: string;
 
-    @Column({ name: 'timestamp', nullable: false })
+    @Column({ name: 'timestamp', type: 'bigint', nullable: false })
     timestamp: number;
 
-    @Column({ name: 'createdAt', type: 'date' })
+    @Column({ name: 'createdAt', type: 'timestamp' })
     createdAt: Date;
 
     @Column()
