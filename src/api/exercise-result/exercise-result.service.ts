@@ -31,6 +31,11 @@ export class ExerciseResultService {
         const results: ExerciseResultEntity[] = await this.exerciseResultRepository.find({
             where: {
                 shooterId
+            },
+            relations: {
+                flights: {
+                    shots: true
+                }
             }
         });
         return results;

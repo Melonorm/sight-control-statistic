@@ -1,10 +1,10 @@
-import {Column, Entity, Generated, ManyToOne, OneToMany, PrimaryGeneratedColumn} from "typeorm";
+import {Column, Entity, Generated, ManyToOne, OneToMany, PrimaryGeneratedColumn, RelationId} from "typeorm";
 import {ShooterEntity} from "./shooter.entity";
 import {FlightEntity} from "./flight.entity";
 
 @Entity({ name: 'exercise_result' })
 export class ExerciseResultEntity {
-    @PrimaryGeneratedColumn()
+    @PrimaryGeneratedColumn({ type: "bigint" })
     id: number;
 
     @Column({ type: 'uuid', unique: true })
@@ -14,10 +14,30 @@ export class ExerciseResultEntity {
     @Column({ name: 'timestamp', type: 'bigint', nullable: false })
     timestamp: number;
 
-    @Column({ name: 'createdAt', type: 'timestamp' })
+    @Column({ name: 'created_at', type: 'timestamp' })
     createdAt: Date;
 
-    @Column()
+    @Column({ name: 'difficulty_level', nullable: false })
+    difficultyLevel: number;
+
+    @Column({ name: 'hits_count', nullable: false })
+    hitsCount: number;
+
+    @Column({ name: 'targets_count', nullable: false })
+    targetsCount: number;
+
+    @Column({ name: 'shells_used', nullable: false })
+    shellsUsed: number;
+
+    @Column({ name: 'info_level', nullable: false })
+    infoLevel: string;   // на стороне Android - ENUM
+
+    @Column({ name: 'points', type: 'decimal', nullable: false })
+    points: number;
+
+
+    @Column({ type: "bigint" })
+    @RelationId((exerciseResult: ExerciseResultEntity) => exerciseResult.shooter)
     shooterId: number;
 
 

@@ -1,4 +1,4 @@
-import {Body, Controller, Delete, Get, Param, Post} from '@nestjs/common';
+import {Body, Controller, Delete, Get, Param, Post, Render} from '@nestjs/common';
 import {ShooterService} from "./shooter.service";
 import {ShooterDto} from "../../common/dto/shooter.dto";
 
@@ -21,5 +21,4 @@ export class ShooterController {
     async delete(@Param("id") id: number) {
         return this.shooterService.delete(id);
     }
-
 }

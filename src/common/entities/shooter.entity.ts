@@ -7,7 +7,7 @@ import {ExerciseResultEntity} from "./exerciseResult.entity";
 
 @Entity({ name: 'shooter' })
 export class ShooterEntity {
-    @PrimaryGeneratedColumn()
+    @PrimaryGeneratedColumn({ type: 'bigint' })
     id: number;
 
     @Column({ type: 'uuid', unique: true })
@@ -20,14 +20,17 @@ export class ShooterEntity {
     @Column({ name: 'last_name', type: 'varchar', nullable: false })
     lastName: string;
 
-    @Column({ name: 'father_name', type: 'varchar', nullable: false, default: '' })
+    @Column({ name: 'father_name', type: 'varchar', nullable: true})
     fatherName?: string;
 
-    @Column({ name: 'call_name', type: 'varchar', nullable: false, default: '' })
+    @Column({ name: 'call_name', type: 'varchar', nullable: true})
     callName?: string;  // позывной
 
-    @Column({ name: 'year_born', type: 'varchar', nullable: true })
-    yearBorn?: number;
+    @Column({ name: 'year_born', nullable: false})
+    yearBorn: number;
+
+    @Column({ name: 'group_name', type: 'varchar', nullable: true })
+    groupName?: string;
 
 
     @OneToMany(() => ExerciseResultEntity, (exerciseResult) => exerciseResult.shooter)

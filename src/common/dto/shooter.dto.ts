@@ -1,5 +1,4 @@
 import {IsNotEmpty, IsNumber, IsOptional, IsPositive, IsString} from "class-validator";
-import {ExerciseResultDto} from "./exercise-result.dto";
 
 export class ShooterDto {
     @IsNotEmpty()
@@ -22,4 +21,8 @@ export class ShooterDto {
     @IsNumber()
     @IsPositive()
     yearBorn?: number;
+
+    @IsOptional()
+    @IsString()
+    groupName?: string;
 }

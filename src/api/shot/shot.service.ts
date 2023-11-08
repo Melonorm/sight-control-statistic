@@ -13,6 +13,7 @@ export class ShotService {
     async create(dto: ShotDto): Promise<ShotEntity> {
         const shot: ShotEntity = new ShotEntity();
         Object.assign(shot, dto);
+        shot.shotTime = new Date(dto.shotTime);
         return this.shotRepository.save(shot);
     }
 

@@ -46,7 +46,10 @@ export class IncomingDataParserService {
 
                 // наполнение Flight
                 if (exerciseResult) {
-                    const incomingFlights: IncomingFlight[] = incomingExercise.flights;
+                    let incomingFlights: IncomingFlight[] = incomingExercise.flights;
+                    if (!incomingFlights) { // если в запросе не пришло flights
+                        incomingFlights = [];
+                    }
                     for (const incomingFlight of incomingFlights) {
                         const flightDto: FlightDto = new FlightDto();
                         Object.assign(flightDto, incomingFlight);
@@ -54,7 +57,10 @@ export class IncomingDataParserService {
                         const flight: FlightEntity = await this.flightService.create(flightDto);
 
                         // наполнение Shot
-                        const incomingShots: IncomingShot[] = incomingFlight.shots;
+                        let incomingShots: IncomingShot[] = incomingFlight.shots;
+                        if (!incomingShots) {
+                            incomingShots = [];
+                        }
                         for (const incomingShot of incomingShots) {
                             const shotDto: ShotDto = new ShotDto();
                             Object.assign(shotDto, incomingShot);
